@@ -1,7 +1,7 @@
 class Calculadora {
-
     constructor(){
         this.display = '';
+        this.memory = 0;
     }
 
     writeToDisplay(n) {
@@ -13,6 +13,10 @@ class Calculadora {
         
         if(n === '0' && this.display === ''){
             return;
+        }
+
+        if(this.display === 'error' || this.display == '0'){
+            this.display = '';
         }
 
         this.display += n;
@@ -42,11 +46,51 @@ class Calculadora {
     }
 
     solveOperation(){
-        this.display = eval(this.display);
+        try{
+            this.display = eval(this.display);
+        }catch(e){
+            console.error(e);
+            this.display = 'error';
+        }
         document.getElementById('displayBox').value = this.display;
     }
 
+    //-- Memory --//
+    clearMemory(){
+        this.memory = 0;
+    }
+    readMemory(){
+        this.display = this.memory;
+        document.getElementById('displayBox').value = this.display;
+    }
+    addToMemory(){
+        this.solveOperation();
+        if(!this.isError()){
+            this.memory += Number(this.display);
+            this.display = this.memory;
+            document.getElementById('displayBox').value = this.display;
+        }
+    }
+    subtractFromMemory(){
+        this.solveOperation();
+        if(!this.isError()){
+            this.memory -= Number(this.display);
+            this.display = this.memory;
+            document.getElementById('displayBox').value = this.display;
+        }
 
+    }
+    saveToMemory(){
+        this.solveOperation();
+        if(!this.isError()){
+            this.memory = Number(this.display);
+        }
+        this.clearDisplay();
+    }
+
+    isError(){
+        return this.display === 'error';
+    }
 }
 
 class CalculadoraCientifica extends Calculadora{
@@ -122,4 +166,5 @@ class CalculadoraCientifica extends Calculadora{
         return this.display === '' || '+-*/'.includes(this.display.charAt(this.display.length - 1));
     }
 }
-let calculadora = new CalculadoraCientifica();
+
+const calculadora = new CalculadoraCientifica();
