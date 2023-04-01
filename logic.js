@@ -29,7 +29,13 @@ class Calculadora {
     } 
 
     toggleSign(){
-        this.display = '(-1)*'+this.display;
+        if(!this.isError()){
+            if(this.display.charAt(0) === '-'){
+                this.display = this.display.slice(1);
+            }else{
+                this.display = '-' + this.display;
+            }
+        }
         document.getElementById('displayBox').value = this.display;
     }
     
@@ -40,7 +46,7 @@ class Calculadora {
 
     eraseLastInput(){
         if(this.display.length > 0 ){
-            this.display = this.display.substr(0, this.display.length - 1);
+            this.display = this.display.slice(0,-1);
             document.getElementById('displayBox').value = this.display;
         }
     }
