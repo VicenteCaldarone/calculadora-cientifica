@@ -11,21 +11,29 @@ class Calculadora {
             }
         }
         
-        if(n === '0' && this.display === ''){
+        if(n === '0' && this.display === '0'){
             return;
         }
 
-        if(this.display === 'error' || this.display == '0'){
+        if(this.display === 'error'){
             this.display = '';
         }
 
         this.display += n;
-        document.getElementById('displayBox').value = this.display;
     };
+
+    set display(valor){
+        document.getElementById('displayBox').value = valor;
+        this._display = valor;
+    }
+    get display(){
+        this._display = document.getElementById('displayBox').value;
+        return this._display;
+    }
+
 
     writeOperatorToDisplay(o){
         this.display += o;
-        document.getElementById('displayBox').value = this.display;
     } 
 
     toggleSign(){
@@ -36,18 +44,15 @@ class Calculadora {
                 this.display = '-' + this.display;
             }
         }
-        document.getElementById('displayBox').value = this.display;
     }
     
     clearDisplay(){
         this.display = '';
-        document.getElementById('displayBox').value = this.display;
     }
 
     eraseLastInput(){
         if(this.display.length > 0 ){
             this.display = this.display.slice(0,-1);
-            document.getElementById('displayBox').value = this.display;
         }
     }
 
@@ -58,7 +63,6 @@ class Calculadora {
             console.error(e);
             this.display = 'error';
         }
-        document.getElementById('displayBox').value = this.display;
     }
 
     //-- Memory --//
@@ -67,14 +71,12 @@ class Calculadora {
     }
     readMemory(){
         this.display = this.memory;
-        document.getElementById('displayBox').value = this.display;
     }
     addToMemory(){
         this.solveOperation();
         if(!this.isError()){
             this.memory += Number(this.display);
             this.display = this.memory;
-            document.getElementById('displayBox').value = this.display;
         }
     }
     subtractFromMemory(){
@@ -82,7 +84,6 @@ class Calculadora {
         if(!this.isError()){
             this.memory -= Number(this.display);
             this.display = this.memory;
-            document.getElementById('displayBox').value = this.display;
         }
 
     }
@@ -137,27 +138,22 @@ class CalculadoraCientifica extends Calculadora{
             default:
                 console.error(`Operación ${mathFunc} no soportada`);
         }
-        document.getElementById('displayBox').value = this.display;
     }
     
     square(){
         this.display = Math.pow(this.display, 2);
-        document.getElementById('displayBox').value = this.display;
     }
 
     cube(){
         this.display = Math.pow(this.display, 3);
-        document.getElementById('displayBox').value = this.display;
     }
 
     inverseNumber(){
         this.display = Math.pow(this.display, -1);
-        document.getElementById('displayBox').value = this.display;
     }
 
     calculateFactorial(){
         this.display = this.factorial(this.display);
-        document.getElementById('displayBox').value = this.display;
     }
 
     factorial(n){
